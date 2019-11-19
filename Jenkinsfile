@@ -2,7 +2,7 @@ pipeline {
     agent {
         docker {
             image 'maven:3.3.3'
-            args '-v /root/.m2:/root/.m2'
+            args "-v /root/.m2:/root/.m2"
         }
     }
     options {
@@ -44,7 +44,7 @@ pipeline {
                 sh "pwd"
                 sh "ls"
             }
-            archiveArtifacts artifacts: "jenkins-pipeline-example-1.0-SNAPSHOT.jar", fingerprint: true
+            archiveArtifacts artifacts: "target/jenkins-pipeline-example-1.0-SNAPSHOT.jar", fingerprint: true
         }
         always {
             echo 'One way or another, I have finished'
