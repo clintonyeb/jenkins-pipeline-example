@@ -9,7 +9,7 @@ pipeline {
         skipStagesAfterUnstable()
     }
     environment {
-        SECRET_KEY = 'peanut butter cheese'
+        SECRET_PHRASE = 'peanut butter cheese'
     }
     stages {
         stage('Build') {
@@ -25,8 +25,18 @@ pipeline {
             }
         }
         stage('Deploy') {
+            input {
+                message "Should we continue?"
+                ok "Yes, we should."
+                parameters {
+                    string(name: 'local_phrase', description: 'Provide the top secret phrase')
+                }
+            }
+            when {
+                expression { params.local_phrase == ${SECRET_PHRASE} }
+            }
             steps {
-
+                sh 'echo "Building Project"'
             }
         }
     }
