@@ -1,53 +1,23 @@
 pipeline {
-    agent { docker { image 'maven:3.3.3' } }
-    environment {
-        DISABLE_AUTH = 'true'
-        DB_ENGINE = 'sqlite'
+    agent any
+    options {
+        skipStagesAfterUnstable()
     }
     stages {
-        stage('build') {
+        stage('Build') {
             steps {
-                echo "Database engine is ${DB_ENGINE}"
-                echo "DISABLE_AUTH is ${DISABLE_AUTH}"
-                sh 'printenv'
-                sh 'mvn package'
+                echo 'Building'
             }
         }
-        stage('test') {
+        stage('Test') {
             steps {
-                sh 'echo "Testing Project"'
-                sh '''
-                    echo "Multiline shell steps works too"
-                    ls -lah
-                '''
-                sh 'mvn test'
+                echo 'Testing'
             }
         }
-    }
-    post {
-        success {
-            echo 'I succeeeded!'
-            dir("${env.WORKSPACE}/target"){
-                sh "pwd"
-                sh "ls"
+        stage('Deploy') {
+            steps {
+                echo 'Deploying'
             }
-            archiveArtifacts artifacts: "target/jenkins-pipeline-example-1.0-SNAPSHOT.jar", fingerprint: true
-        }
-        always {
-            echo 'One way or another, I have finished'
-            deleteDir() /* clean up our workspace */
-        }
-        unstable {
-            echo 'I am unstable :/'
-        }
-        failure {
-            echo 'I failed :('
-            mail to: 'clintonyeb@gmail.com',
-                    subject: "Failed Pipeline: ${currentBuild.fullDisplayName}",
-                    body: "Something is wrong with ${env.BUILD_URL}"
-        }
-        changed {
-            echo 'Things were different before...'
         }
     }
 }
