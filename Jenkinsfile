@@ -9,7 +9,7 @@ pipeline {
         skipStagesAfterUnstable()
     }
     environment {
-
+        SECRET_KEY = 'peanut butter cheese'
     }
     stages {
         stage('Build') {
@@ -22,6 +22,11 @@ pipeline {
             steps {
                 sh 'echo "Testing Project"'
                 sh 'mvn test'
+            }
+        }
+        stage('Deploy') {
+            steps {
+
             }
         }
     }
