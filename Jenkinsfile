@@ -33,9 +33,7 @@ pipeline {
                 }
             }
             when {
-                sh "echo ${SECRET_PHRASE}"
-                sh "echo ${params.local_phrase}"
-                expression { params.local_phrase.equals(env.SECRET_PHRASE) }
+                expression { params.local_phrase.equals == 'peanut butter cheese' }
             }
             steps {
                 sh 'echo "Building Project"'
