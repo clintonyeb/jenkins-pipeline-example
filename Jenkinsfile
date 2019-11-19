@@ -1,40 +1,21 @@
 pipeline {
     agent any
-    options {
-        skipStagesAfterUnstable()
-    }
-    stages {
-        stage('Build') {
-            steps {
-                echo 'Building'
-            }
-        }
-        stage('Test') {
-            steps {
-                echo 'Testing'
-            }
-        }
-        stage('Deploy') {
-            steps {
-                echo 'Deploying'
-            }
+    stage('Deploy - Staging') {
+        steps {
+            sh './deploy staging'
+            sh './run-smoke-tests'
         }
     }
-    post {
-        success {
-            echo 'I succeeeded!'
-            always {
-                echo 'One way or another, I have finished'
-            }
-            unstable {
-                echo 'I am unstable :/'
-            }
-            failure {
-                echo 'I failed :('
-            }
-            changed {
-                echo 'Things were different before...'
-            }
+
+    stage('Sanity check') {
+        steps {
+            input "Does the staging environment look ok?"
+        }
+    }
+
+    stage('Deploy - Production') {
+        steps {
+            sh './deploy production'
         }
     }
 }
