@@ -1,38 +1,40 @@
-def username = 'Jenkins'
-
 pipeline {
-    agent any
-    environment {
-        AWS_ACCESS_KEY_ID     = credentials('jenkins-aws-secret-key-id')
-        AWS_SECRET_ACCESS_KEY = credentials('jenkins-aws-secret-access-key')
-    }
-    options {
-        skipStagesAfterUnstable()
-    }
+    agent none
     stages {
         stage('Build') {
-            environment {
-                DEBUG_FLAGS = '-g'
-            }
+            agent any
             steps {
-                echo "Hello Mr. ${username}"
-                echo "I said, Hello Mr. ${username}"
-                echo 'Building'
+                checkout scm
+                sh 'make'
+                stash includes: '**/target/*.jar', name: 'app'
             }
         }
-        stage('Test') {
-            steps {
-                echo 'Testing'
+        stage('Test on Linux') {
+            agent {
+                label 'linux'
             }
-        }
-        stage('Deploy') {
-            when {
-                expression {
-                    currentBuild.result == null || currentBuild.result == 'SUCCESS'
+            steps {
+                unstash 'app'
+                sh 'make check'
+            }
+            post {
+                always {
+                    junit '**/target/*.xml'
                 }
             }
+        }
+        stage('Test on Windows') {
+            agent {
+                label 'windows'
+            }
             steps {
-                echo 'Deploying'
+                unstash 'app'
+                bat 'make check'
+            }
+            post {
+                always {
+                    junit '**/target/*.xml'
+                }
             }
         }
     }
