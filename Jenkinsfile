@@ -20,4 +20,21 @@ pipeline {
             }
         }
     }
+    post {
+        success {
+            echo 'I succeeeded!'
+            always {
+                echo 'One way or another, I have finished'
+            }
+            unstable {
+                echo 'I am unstable :/'
+            }
+            failure {
+                echo 'I failed :('
+            }
+            changed {
+                echo 'Things were different before...'
+            }
+        }
+    }
 }
