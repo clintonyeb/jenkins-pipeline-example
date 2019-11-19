@@ -16,12 +16,12 @@ pipeline {
                 sh 'mvn test'
             }
         }
-        dir("${env.WORKSPACE}/target"){
-            sh "pwd"
-        }
     }
     post {
         success {
+            dir("${env.WORKSPACE}/target"){
+                sh "pwd"
+            }
             archiveArtifacts artifacts: 'targets/jenkins-pipeline-example-1.0-SNAPSHOT.jar', fingerprint: true
         }
     }
