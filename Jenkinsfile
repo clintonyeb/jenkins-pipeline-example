@@ -25,10 +25,10 @@ pipeline {
             }
         }
         stage('Deploy') {
-            def userInput = input(id: 'userInput',
-                    message = "Should we continue to deploy?",
-                    ok = "Yes, we should."
-            )
+            def userInput = input(
+                    id: 'userInput', message: 'Should we continue to deploy?', parameters: [
+                    [$class: 'TextParameterDefinition', defaultValue: 'here', description: 'Environment', name: 'deploy']
+            ])
             when {
                 expression { userInput == 'peanut butter cheese' }
             }
