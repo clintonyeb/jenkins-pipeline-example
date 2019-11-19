@@ -8,9 +8,6 @@ pipeline {
     options {
         skipStagesAfterUnstable()
     }
-    environment {
-
-    }
     stages {
         stage('Build') {
             steps {
