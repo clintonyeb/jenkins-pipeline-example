@@ -25,15 +25,12 @@ pipeline {
             }
         }
         stage('Deploy') {
-            input {
-                message "Should we continue?"
-                ok "Yes, we should."
-                parameters {
-                    string(name: 'local_phrase', description: 'Provide the top secret phrase')
-                }
-            }
+            def userInput = input(id: 'userInput',
+                    message = "Should we continue to deploy?",
+                    ok = "Yes, we should."
+            )
             when {
-                expression { params.local_phrase.equals == 'peanut butter cheese' }
+                expression { userInput == 'peanut butter cheese' }
             }
             steps {
                 sh 'echo "Building Project"'
