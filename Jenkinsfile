@@ -1,27 +1,25 @@
 pipeline {
-    agent any
+    agent { docker { image 'maven:3.3.3' } }
     stages {
         stage('build') {
             steps {
-                sh 'echo "Hello World"'
+                sh 'mvn package'
+            }
+        }
+        stage('test') {
+            steps {
+                sh 'echo "Testing Project"'
                 sh '''
                     echo "Multiline shell steps works too"
                     ls -lah
                 '''
-                sh 'javac -d . src/*.java'
-                sh 'echo Main-Class: Rectangulator > MANIFEST.MF'
-                sh 'jar -cvmf MANIFEST.MF rectangle.jar *.class'
-            }
-        }
-        stage('run') {
-            steps {
-                sh 'java -jar rectangle.jar 7 9'
+                sh 'mvn test'
             }
         }
     }
     post {
         success {
-            archiveArtifacts artifacts: 'rectangle.jar', fingerprint: true
+            archiveArtifacts artifacts: 'targets/jenkins-pipeline-example.jar', fingerprint: true
         }
     }
 }
