@@ -16,6 +16,9 @@ pipeline {
                 sh 'mvn test'
             }
         }
+        dir("${env.WORKSPACE}/target"){
+            sh "pwd"
+        }
     }
     post {
         success {
