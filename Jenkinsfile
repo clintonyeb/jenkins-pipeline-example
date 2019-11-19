@@ -29,6 +29,11 @@ pipeline {
                     ls -lah
                 '''
                 sh 'mvn test'
+                post {
+                    always {
+                        junit 'target/surefire-reports/*.xml'
+                    }
+                }
             }
         }
     }
@@ -43,7 +48,6 @@ pipeline {
         }
         always {
             echo 'One way or another, I have finished'
-            junit 'target/surefire-reports/*.xml'
         }
         unstable {
             echo 'I am unstable :/'
