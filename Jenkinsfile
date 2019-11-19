@@ -31,7 +31,7 @@ pipeline {
                 sh "pwd"
                 sh "ls"
             }
-            archiveArtifacts artifacts: "target/jenkins-pipeline-example-1.0-SNAPSHOT.jar", fingerprint: true
+            archiveArtifacts artifacts: "jenkins-pipeline-example-1.0-SNAPSHOT.jar", fingerprint: true
         }
         always {
             echo 'One way or another, I have finished'
