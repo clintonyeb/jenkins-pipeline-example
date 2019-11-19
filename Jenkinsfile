@@ -19,7 +19,7 @@ pipeline {
     }
     post {
         success {
-            archiveArtifacts artifacts: 'targets/jenkins-pipeline-example.jar', fingerprint: true
+            archiveArtifacts artifacts: 'targets/jenkins-pipeline-example-1.0-SNAPSHOT.jar', fingerprint: true
         }
     }
 }
