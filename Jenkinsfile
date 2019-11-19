@@ -1,5 +1,13 @@
 pipeline {
-    agent { docker { image 'maven:3.3.3' } }
+    agent {
+        docker {
+            image 'maven:3.3.3'
+            args '-v /root/.m2:/root/.m2'
+        }
+    }
+    options {
+        skipStagesAfterUnstable()
+    }
     environment {
         DISABLE_AUTH = 'true'
         DB_ENGINE = 'sqlite'
@@ -10,7 +18,7 @@ pipeline {
                 echo "Database engine is ${DB_ENGINE}"
                 echo "DISABLE_AUTH is ${DISABLE_AUTH}"
                 sh 'printenv'
-                sh 'mvn package'
+                sh 'mvn clean package'
             }
         }
         stage('test') {
@@ -35,7 +43,7 @@ pipeline {
         }
         always {
             echo 'One way or another, I have finished'
-            deleteDir() /* clean up our workspace */
+            junit 'target/surefire-reports/*.xml'
         }
         unstable {
             echo 'I am unstable :/'
