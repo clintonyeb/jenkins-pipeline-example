@@ -21,8 +21,9 @@ pipeline {
         success {
             dir("${env.WORKSPACE}/target"){
                 sh "pwd"
+                sh "ls"
             }
-            archiveArtifacts artifacts: "${env.WORKSPACE}/targets/jenkins-pipeline-example-1.0-SNAPSHOT.jar", fingerprint: true
+            archiveArtifacts artifacts: "${env.WORKSPACE}/target/jenkins-pipeline-example-1.0-SNAPSHOT.jar", fingerprint: true
         }
     }
 }
